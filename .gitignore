@@ -1,9 +1,3 @@
 bot/*
-mysqldata/*
-docker-compose.yml
-*pyc
-gemfinder.conf
-*.log
-*.log.*
-data
-mp3
+*wav
+*sqlite3
