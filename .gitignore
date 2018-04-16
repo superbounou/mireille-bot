@@ -1,0 +1,9 @@
+flask/*
+mysqldata/*
+docker-compose.yml
+*pyc
+gemfinder.conf
+*.log
+*.log.*
+data
+mp3
