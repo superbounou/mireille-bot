@@ -4,7 +4,7 @@ import logging
 import sys
 import ConfigParser
 from .audio import Audio
-from .cloud import Cloud
+from .speech import Speech
 from .bot import Bot
 
 LOGGER = logging.getLogger(__name__)
@@ -22,8 +22,8 @@ class AudioStage(object): # pylint: disable=too-few-public-methods
     @staticmethod
     def read(): # pylint: disable=invalid-name
         """Read input sound"""
-        cloud = Cloud()
-        print cloud.get_words('test.wav')
+        speech = Speech()
+        print speech.get_words('test.wav')
 
 #pylint: disable=invalid-name
 class BotStage(object): # pylint: disable=too-few-public-methods

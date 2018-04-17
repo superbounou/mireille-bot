@@ -12,10 +12,7 @@ from google.cloud.speech import types
 CONFIG = ConfigParser.ConfigParser()
 CONFIG.read("mireille.cfg")
 
-class Cloud(object):
-    """Scheduler action"""
-    def __init__(self):
-        print("foo")
+class Speech(object):
 
     def get_words(self, sound_file):
         # Instantiates a client
@@ -31,4 +28,7 @@ class Cloud(object):
             language_code='fr-FR')
 
         # Detects speech in the audio file
-        return client.recognize(config, audio)
+        response = client.recognize(config, audio)
+        if len(response.results) > 0:
+            return response.results[0].alternatives[0].transcript
+        return None
