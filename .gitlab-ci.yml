@@ -1,0 +1,11 @@
+stages:
+  - lint
+
+pylint:
+    image: python:2.7
+    stage: lint
+    script:
+        - pip install -r requirements.txt
+        - pylint --rcfile=.pylintrc *.py youtube/*py
+    tags:
+        - docker

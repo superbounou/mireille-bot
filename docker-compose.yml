@@ -1,0 +1,3 @@
+app:
+  image: sample-application
+  restart: always

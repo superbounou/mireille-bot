@@ -1,5 +1,5 @@
 #!/bin/bash
 
-virtualenv -p python3 bot
-source bot/bin/activate
+virtualenv libs
+source libs/bin/activate
 pip install -r requirements.txt
