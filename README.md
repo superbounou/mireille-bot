@@ -27,4 +27,4 @@ Sample Python application to bootsrap idea ship with :
 
 # 2. License
 
-This sample is licensed under the [BSD 3-clause license](https://opensource.org/licenses/BSD-3-Clause).
+This sample is licensed under the BeerWare :)
