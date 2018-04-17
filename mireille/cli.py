@@ -5,6 +5,7 @@ import sys
 import ConfigParser
 from .audio import Audio
 from .cloud import Cloud
+from .bot import Bot
 
 LOGGER = logging.getLogger(__name__)
 CONFIG = ConfigParser.ConfigParser()
@@ -24,6 +25,13 @@ class AudioStage(object): # pylint: disable=too-few-public-methods
         cloud = Cloud()
         print cloud.get_words('test.wav')
 
+#pylint: disable=invalid-name
+class BotStage(object): # pylint: disable=too-few-public-methods
+    @staticmethod
+    def conversation(): # pylint: disable=invalid-name
+        """Read input sound"""
+        bot = Bot()
+        bot.conversation()
 
 
 class Cli(object):# pylint: disable=too-few-public-methods
@@ -31,3 +39,4 @@ class Cli(object):# pylint: disable=too-few-public-methods
     def __init__(self):
         """CLI constructor"""
         self.audio = AudioStage()
+        self.bot = BotStage()
