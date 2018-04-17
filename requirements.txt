@@ -1,3 +1,4 @@
+setuptools
 requests
 pylint
 fire

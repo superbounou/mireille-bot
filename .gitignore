@@ -1,4 +1,6 @@
+*/*pyc
 libs/*
 *wav
 *sqlite3
 *json
+*log
