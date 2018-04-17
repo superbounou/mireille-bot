@@ -15,10 +15,10 @@ class Audio(object):
     """Scheduler action"""
     def __init__(self):
         """Constructor"""
-        self.THRESHOLD = 500
-        self.CHUNK_SIZE = 1024
+        self.THRESHOLD = int(CONFIG.get('audio','threshold'))
+        self.CHUNK_SIZE = int(CONFIG.get('audio','chunk_size'))
         self.FORMAT = pyaudio.paInt16
-        self.RATE = 44100
+        self.RATE = int(CONFIG.get('audio','rate'))
 
     def is_silent(self, snd_data):
         "Returns 'True' if below the 'silent' self.THRESHOLD"

@@ -20,7 +20,7 @@ try:
     formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
     file_handler = RotatingFileHandler('mireille.log', 'a', 1000000, 1)
 
-    if CONFIG.get('display', 'log_level') == 'info':
+    if CONFIG.get('display', 'log_level') == 'debug':
         logger.setLevel(logging.DEBUG)
         file_handler.setLevel(logging.DEBUG)
         stream_handler.setLevel(logging.DEBUG)
