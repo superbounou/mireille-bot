@@ -1,0 +1,8 @@
+libs/*
+mysqldata/*
+*pyc
+gemfinder.conf
+*.log
+*.log.*
+data
+mp3
