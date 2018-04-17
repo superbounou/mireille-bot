@@ -4,6 +4,7 @@ import logging
 import sys
 import ConfigParser
 from .audio import Audio
+from .cloud import Cloud
 
 LOGGER = logging.getLogger(__name__)
 CONFIG = ConfigParser.ConfigParser()
@@ -16,6 +17,13 @@ class AudioStage(object): # pylint: disable=too-few-public-methods
         """FOO"""
         audio = Audio()
         audio.record_to_file('test.wav')
+
+    @staticmethod
+    def read(): # pylint: disable=invalid-name
+        """Read input sound"""
+        cloud = Cloud()
+        print cloud.get_words('test.wav')
+
 
 
 class Cli(object):# pylint: disable=too-few-public-methods

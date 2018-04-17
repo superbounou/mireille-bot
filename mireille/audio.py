@@ -8,7 +8,6 @@ import pyaudio
 import wave
 
 
-
 CONFIG = ConfigParser.ConfigParser()
 CONFIG.read("mireille.cfg")
 
