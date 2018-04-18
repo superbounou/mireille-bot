@@ -2,11 +2,12 @@
 import time
 import ConfigParser
 
-CONFIG = ConfigParser.ConfigParser()
-CONFIG.read("mireille.cfg")
-
+from chatterbot import ChatBot
 from .audio import Audio
 from .speech import Speech
+
+CONFIG = ConfigParser.ConfigParser()
+CONFIG.read("mireille.cfg")
 
 class Bot(object):
 
@@ -22,3 +23,9 @@ class Bot(object):
             if silence > 1:
                 print("Ok bye !")
                 break
+                
+    def traine(self):
+        bot = ChatBot(
+            'Charlie',
+            trainer='chatterbot.trainers.ListTrainer'
+        )
