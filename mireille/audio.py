@@ -78,7 +78,7 @@ class Audio(object):
         stream = _pyaudio.open(format=self._format, channels=1,
                                rate=self._bufferate,
                                input=True, output=True,
-                               frames_pyaudioer_buffer=self._chunk_size)
+                               frames_per_buffer=self._chunk_size)
 
         num_silent = 0
         snd_started = False
