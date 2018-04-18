@@ -34,6 +34,18 @@ class BotStage(object): # pylint: disable=too-few-public-methods
         bot = Bot()
         bot.conversation()
 
+    @staticmethod
+    def train():
+        """Train the bot"""
+        bot = Bot()
+        bot.train()
+
+    @staticmethod
+    def corpus(path):
+        """Train the bot"""
+        bot = Bot()
+        bot.extract_corpus_from_epub(path)
+
 
 class Cli(object):# pylint: disable=too-few-public-methods
     """CLI class"""

@@ -6,3 +6,4 @@ SpeechRecognition
 pyaudio
 google-cloud-speech
 chatterbot
+bs4

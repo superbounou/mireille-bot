@@ -1,7 +1,10 @@
 """Bot class"""
 import ConfigParser
+import glob
 
 from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer
+from bs4 import BeautifulSoup
 from .audio import Audio
 from .speech import Speech
 
@@ -25,10 +28,22 @@ class Bot(object):
                 return 0
 
     @staticmethod
-    def traine():
+    def train(data):
         """Traine the bot"""
-        bot = ChatBot(
-            'Charlie',
-            trainer='chatterbot.trainers.ListTrainer'
-        )
-        bot.train()
+        bot = ChatBot(CONFIG.get('general', 'botname'))
+        bot.set_trainer(ListTrainer)
+        # Train based on the english corpus
+        bot.train(data)
+        # Get a response to an input statement
+        bot.get_response("Salut !")
+
+    def extract_corpus_from_epub(self, path):
+        """Extract data from corpus"""
+        _data = []
+        for _file in glob.glob(path):
+            soup = BeautifulSoup(open(_file), 'html.parser')
+            for sentence in soup.find_all('p','MsoNormal'):
+                if sentence.string is not None:
+                    if not sentence.string.isupper():
+                        _data.extend(sentence.string.replace("\n"," "))
+        self.train(_data)
