@@ -1,5 +1,4 @@
-"""Class example"""
-import time
+"""Bot class"""
 import ConfigParser
 
 from chatterbot import ChatBot
@@ -10,8 +9,10 @@ CONFIG = ConfigParser.ConfigParser()
 CONFIG.read("mireille.cfg")
 
 class Bot(object):
-
-    def conversation(self):
+    """Manage Bot interactions"""
+    @staticmethod
+    def conversation():
+        """Start conversation with the bot"""
         silence = 0
         while True:
             audio = Audio()
@@ -21,11 +22,13 @@ class Bot(object):
             print sentence
             silence = silence + 1 if sentence is None else silence
             if silence > 1:
-                print("Ok bye !")
-                break
-                
-    def traine(self):
+                return 0
+
+    @staticmethod
+    def traine():
+        """Traine the bot"""
         bot = ChatBot(
             'Charlie',
             trainer='chatterbot.trainers.ListTrainer'
         )
+        bot.train()

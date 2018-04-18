@@ -1,9 +1,9 @@
 #!bot/bin/python3
 # pylint: disable=C0103
 # -*- coding: utf-8 -*-
+"""Manage speech interactions"""
+
 import io
-import os
-import time
 import ConfigParser
 from google.cloud import speech
 from google.cloud.speech import enums
@@ -13,8 +13,10 @@ CONFIG = ConfigParser.ConfigParser()
 CONFIG.read("mireille.cfg")
 
 class Speech(object):
-
-    def get_words(self, sound_file):
+    """Manage speech interactions"""
+    @staticmethod
+    def get_words(sound_file):
+        """Send to Google Speech API and return spoken sentences"""
         # Instantiates a client
         client = speech.SpeechClient()
         # Loads the audio into memory

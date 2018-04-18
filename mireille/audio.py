@@ -2,52 +2,50 @@
 from sys import byteorder
 from array import array
 from struct import pack
-from array import array
 import ConfigParser
-import pyaudio
 import wave
-
+import pyaudio
 
 CONFIG = ConfigParser.ConfigParser()
 CONFIG.read("mireille.cfg")
+
+def normalize(snd_data):
+    """Average the volume out"""
+    _max = 16384
+    times = float(_max)/max(abs(i) for i in snd_data)
+
+    _buffer = array('h')
+    for i in snd_data:
+        _buffer.append(int(i*times))
+    return _buffer
 
 class Audio(object):
     """Scheduler action"""
     def __init__(self):
         """Constructor"""
-        self.THRESHOLD = int(CONFIG.get('audio','threshold'))
-        self.CHUNK_SIZE = int(CONFIG.get('audio','chunk_size'))
-        self.FORMAT = pyaudio.paInt16
-        self.RATE = int(CONFIG.get('audio','rate'))
+        self._threshold = int(CONFIG.get('audio', 'threshold'))
+        self._chunk_size = int(CONFIG.get('audio', 'chunk_size'))
+        self._format = pyaudio.paInt16
+        self._bufferate = int(CONFIG.get('audio', 'rate'))
 
     def is_silent(self, snd_data):
-        "Returns 'True' if below the 'silent' self.THRESHOLD"
-        return max(snd_data) < self.THRESHOLD
-
-    def normalize(self, snd_data):
-        "Average the volume out"
-        MAXIMUM = 16384
-        times = float(MAXIMUM)/max(abs(i) for i in snd_data)
-
-        r = array('h')
-        for i in snd_data:
-            r.append(int(i*times))
-        return r
+        """Returns 'True' if below the 'silent' self._threshold"""
+        return max(snd_data) < self._threshold
 
     def trim(self, snd_data):
         "Trim the blank spots at the start and end"
         def _trim(snd_data):
             snd_started = False
-            r = array('h')
+            _buffer = array('h')
 
             for i in snd_data:
-                if not snd_started and abs(i)>self.THRESHOLD:
+                if not snd_started and abs(i) > self._threshold:
                     snd_started = True
-                    r.append(i)
+                    _buffer.append(i)
 
                 elif snd_started:
-                    r.append(i)
-            return r
+                    _buffer.append(i)
+            return _buffer
 
         # Trim to the left
         snd_data = _trim(snd_data)
@@ -59,11 +57,12 @@ class Audio(object):
         return snd_data
 
     def add_silence(self, snd_data, seconds):
-        "Add silence to the start and end of 'snd_data' of length 'seconds' (float)"
-        r = array('h', [0 for i in xrange(int(seconds*self.RATE))])
-        r.extend(snd_data)
-        r.extend([0 for i in xrange(int(seconds*self.RATE))])
-        return r
+        """Add silence to the start and end of 'snd_data' of length 'seconds'
+        (float)"""
+        _buffer = array('h', [0 for i in xrange(int(seconds*self._bufferate))])
+        _buffer.extend(snd_data)
+        _buffer.extend([0 for i in xrange(int(seconds*self._bufferate))])
+        return _buffer
 
     def record(self):
         """
@@ -75,22 +74,23 @@ class Audio(object):
         blank sound to make sure VLC et al can play
         it without getting chopped off.
         """
-        p = pyaudio.PyAudio()
-        stream = p.open(format=self.FORMAT, channels=1, rate=self.RATE,
-            input=True, output=True,
-            frames_per_buffer=self.CHUNK_SIZE)
+        _pyaudio = pyaudio.PyAudio()
+        stream = _pyaudio.open(format=self._format, channels=1,
+                               rate=self._bufferate,
+                               input=True, output=True,
+                               frames_pyaudioer_buffer=self._chunk_size)
 
         num_silent = 0
         snd_started = False
 
-        r = array('h')
+        _buffer = array('h')
 
         while 1:
             # little endian, signed short
-            snd_data = array('h', stream.read(self.CHUNK_SIZE))
+            snd_data = array('h', stream.read(self._chunk_size))
             if byteorder == 'big':
                 snd_data.byteswap()
-            r.extend(snd_data)
+            _buffer.extend(snd_data)
 
             silent = self.is_silent(snd_data)
 
@@ -102,24 +102,24 @@ class Audio(object):
             if snd_started and num_silent > 30:
                 break
 
-        sample_width = p.get_sample_size(self.FORMAT)
+        sample_width = _pyaudio.get_sample_size(self._format)
         stream.stop_stream()
         stream.close()
-        p.terminate()
+        _pyaudio.terminate()
 
-        r = self.normalize(r)
-        r = self.trim(r)
-        r = self.add_silence(r, 0.5)
-        return sample_width, r
+        _buffer = normalize(_buffer)
+        _buffer = self.trim(_buffer)
+        _buffer = self.add_silence(_buffer, 0.5)
+        return sample_width, _buffer
 
     def record_to_file(self, path):
         "Records from the microphone and outputs the resulting data to 'path'"
         sample_width, data = self.record()
         data = pack('<' + ('h'*len(data)), *data)
 
-        wf = wave.open(path, 'wb')
-        wf.setnchannels(1)
-        wf.setsampwidth(sample_width)
-        wf.setframerate(self.RATE)
-        wf.writeframes(data)
-        wf.close()
+        _wf = wave.open(path, 'wb')
+        _wf.setnchannels(1)
+        _wf.setsampwidth(sample_width)
+        _wf.setframerate(self._bufferate)
+        _wf.writeframes(data)
+        _wf.close()

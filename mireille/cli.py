@@ -1,7 +1,5 @@
 """This class manage the CLI interaction"""
-import json
 import logging
-import sys
 import ConfigParser
 from .audio import Audio
 from .speech import Speech
@@ -23,10 +21,13 @@ class AudioStage(object): # pylint: disable=too-few-public-methods
     def read(): # pylint: disable=invalid-name
         """Read input sound"""
         speech = Speech()
-        print speech.get_words('test.wav')
+        print(speech.get_words('test.wav'))
+        return 0
+
 
 #pylint: disable=invalid-name
 class BotStage(object): # pylint: disable=too-few-public-methods
+    """Start conversation with the bot"""
     @staticmethod
     def conversation(): # pylint: disable=invalid-name
         """Read input sound"""
